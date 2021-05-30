@@ -1,2 +1,7 @@
 build
 release
+__tests__
+
+CMakeLists.txt
+build.bat
+clear.bat

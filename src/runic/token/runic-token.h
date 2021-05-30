@@ -15,133 +15,131 @@
 
 using namespace std;
 
-namespace Token {
-  enum keys {
-    NEW_LINE,
-    COMMENT,
-    WHITESPACE,
-    SEMICOLON,
-    COMMA,
-    
-    FUNCTION,
-    TYPE_SPECIFIER,
-    RETURN_TYPE,
-    RETURN,
-    
-    PRINT,
-    READ,
+enum TokenKeys {
+  NEW_LINE,
+  COMMENT,
+  WHITESPACE,
+  SEMICOLON,
+  COMMA,
+  
+  FUNCTION,
+  TYPE_SPECIFIER,
+  RETURN_TYPE,
+  RETURN,
+  
+  PRINT,
+  READ,
 
-    IF,
-    ELSE,
+  IF,
+  ELSE,
 
-    FOR,
-    WHILE,
+  FOR,
+  WHILE,
 
-    IDENTIFIER,
-    NUMBER,
-    STRING,
-    
-    ASSIGNMENT,
-    
-    PLUS,
-    PLUS_EQUAL,
-    MINUS,
-    MINUS_EQUAL,
-    TIMES,
-    TIMES_EQUAL,
-    DIVIDED,
-    DIVIDED_EQUAL,
-    MODULE,
-    MODULE_EQUAL,
-    POWER,
-    POWER_EQUAL,
-    
-    EQUAL,
-    NOT_EQUAL,
-    LESS_THAN,
-    LESS_EQUAL,
-    GREATER_THAN,
-    GREATER_EQUAL,
+  IDENTIFIER,
+  NUMBER,
+  STRING,
+  
+  ASSIGNMENT,
+  
+  PLUS,
+  PLUS_EQUAL,
+  MINUS,
+  MINUS_EQUAL,
+  TIMES,
+  TIMES_EQUAL,
+  DIVIDED,
+  DIVIDED_EQUAL,
+  MODULE,
+  MODULE_EQUAL,
+  POWER,
+  POWER_EQUAL,
+  
+  EQUAL,
+  NOT_EQUAL,
+  LESS_THAN,
+  LESS_EQUAL,
+  GREATER_THAN,
+  GREATER_EQUAL,
 
-    AND,
-    OR,
+  AND,
+  OR,
 
-    OPEN_PARENTHESES,
-    CLOSE_PARENTHESES,
-    OPEN_BRACKETS,
-    CLOSE_BRACKETS,
-    OPEN_BRACES,
-    CLOSE_BRACES
-  };
+  OPEN_PARENTHESES,
+  CLOSE_PARENTHESES,
+  OPEN_BRACKETS,
+  CLOSE_BRACKETS,
+  OPEN_BRACES,
+  CLOSE_BRACES
+};
 
-  string names[] = {
-    "NEW_LINE",
-    "COMMENT",
-    "WHITESPACE",
-    "SEMICOLON",
-    "COMMA",
+string TokenNames[] = {
+  "NEW_LINE",
+  "COMMENT",
+  "WHITESPACE",
+  "SEMICOLON",
+  "COMMA",
 
-    "FUNCTION",
-    "TYPE_SPECIFIER",
-    "RETURN_TYPE",
-    "RETURN",
+  "FUNCTION",
+  "TYPE_SPECIFIER",
+  "RETURN_TYPE",
+  "RETURN",
 
-    "PRINT",
-    "READ",
+  "PRINT",
+  "READ",
 
-    "IF",
-    "ELSE",
-    
-    "FOR",
-    "WHILE",
+  "IF",
+  "ELSE",
+  
+  "FOR",
+  "WHILE",
 
-    "IDENTIFIER",
-    "NUMBER",
-    "STRING",
+  "IDENTIFIER",
+  "NUMBER",
+  "STRING",
 
-    "ASSIGNMENT",
+  "ASSIGNMENT",
 
-    "PLUS",
-    "PLUS_EQUAL",
-    "MINUS",
-    "MINUS_EQUAL",
-    "TIMES",
-    "TIMES_EQUAL",
-    "DIVIDED",
-    "DIVIDED_EQUAL",
-    "MODULE",
-    "MODULE_EQUAL",
-    "POWER",
-    "POWER_EQUAL",
+  "PLUS",
+  "PLUS_EQUAL",
+  "MINUS",
+  "MINUS_EQUAL",
+  "TIMES",
+  "TIMES_EQUAL",
+  "DIVIDED",
+  "DIVIDED_EQUAL",
+  "MODULE",
+  "MODULE_EQUAL",
+  "POWER",
+  "POWER_EQUAL",
 
-    "EQUAL",
-    "NOT_EQUAL",
-    "LESS_THAN",
-    "LESS_EQUAL",
-    "GREATER_THAN",
-    "GREATER_EQUAL",
+  "EQUAL",
+  "NOT_EQUAL",
+  "LESS_THAN",
+  "LESS_EQUAL",
+  "GREATER_THAN",
+  "GREATER_EQUAL",
 
-    "AND",
-    "OR",
+  "AND",
+  "OR",
 
-    "OPEN_PARENTHESES",
-    "CLOSE_PARENTHESES",
-    "OPEN_BRACKETS",
-    "CLOSE_BRACKETS",
-    "OPEN_BRACES",
-    "CLOSE_BRACES"
-  };
+  "OPEN_PARENTHESES",
+  "CLOSE_PARENTHESES",
+  "OPEN_BRACKETS",
+  "CLOSE_BRACKETS",
+  "OPEN_BRACES",
+  "CLOSE_BRACES"
+};
 
-  struct RUNIC_TOKEN_API Token {
-    string lexeme;
-    string name;
-    int key;
-    
-    Token(int key, string name, string lexeme);
-    Token();
+struct RUNIC_TOKEN_API Token {
+  string lexeme;
+  string name;
+  int key;
+  
+  Token(int key, string name, string lexeme);
+  Token();
 
-    void show();
-  };
+  void show();
 };
 
 #endif
