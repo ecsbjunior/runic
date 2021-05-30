@@ -3,7 +3,7 @@
 Lexer::Lexer(string source_code) {
   this->regex_number         = regex("(\\+|\\-)?[0-9]+(.[0-9]+)?");
   this->regex_identifier     = regex("[a-zA-Z]([a-zA-Z0-9_]+)?");
-  this->regex_keyword        = regex("((fn|if|else|for|while|print|read|return))");
+  this->regex_keyword        = regex("((fn|fc|if|else|for|while|print|read|return))");
   this->regex_type_specifier = regex("((void|bool|char|string|int|float))");
 
   this->current = 0;
