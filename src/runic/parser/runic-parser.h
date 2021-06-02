@@ -3,6 +3,7 @@
 
 #include <map>
 #include <runic-token-table.h>
+#include <runic-parser-exception.h>
 
 #ifdef RUNIC_PLATFORM_WINDOWS
   #ifdef RUNIC_PARSER_IMPLEMENTATION

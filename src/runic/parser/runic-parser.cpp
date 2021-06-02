@@ -11,16 +11,16 @@ bool Parser::run() {
   try {
     this->entry_point();
   }
-  catch(...) { //RunicException exception
-    printf("ERRO\n");
+  catch(RunicException exception) {
+    printf("%s\n", exception.get_message().c_str());
     this->next_statement();
 
     while(!this->is_end()) {
       try {
-        this->entry_point();
+        this->command();
       }
-      catch(...) {
-        printf("ERRO\n");
+      catch(RunicException exception) {
+        printf("%s\n", exception.get_message().c_str());
         this->next_statement();
       }
     }
@@ -33,13 +33,12 @@ void Parser::eat(int token_key) {
   Token* token = this->get_token();
 
   if(token->key != token_key) {
-    printf("ERROU\n");
-    // throw ParserException (
-    //   "Expected '" + TokenValues[TokenKey] +
-    //   "' but was founded '" + token->value +
-    //   "' at line " + std::to_string(this->lexer->tokenTable->current->prev->line) +
-    //   " and column " + std::to_string(this->lexer->tokenTable->current->prev->column)
-    // );
+    throw ParserException (
+      "Expected '" + TokenNames[token_key] +
+      "' but was founded '" + token->name +
+      "' at line " + std::to_string(this->current_token_table_node->prev->line) +
+      " and column " + std::to_string(this->current_token_table_node->prev->column)
+    );
   }
 }
 
@@ -56,7 +55,16 @@ bool Parser::try_eat(int token_key) {
 }
 
 void Parser::next_statement() {
+  Token* token = this->current_token_table_node->token;
+  this->next_token_table_node();
+  while(!this->is_end() && token->key != TokenKeys::OPEN_BRACKETS) {
+    token = this->current_token_table_node->token;
+    this->next_token_table_node();
+  }
 
+  if(!this->is_end() && token->key == TokenKeys::OPEN_BRACKETS) {
+    this->backtrack_token_table_node();
+  }
 }
 
 bool Parser::is_end() {
@@ -138,12 +146,12 @@ void Parser::terminal() {
   Token* token = this->get_token();
 
   if(!(token->key == TokenKeys::IDENTIFIER || token->key == TokenKeys::STRING || token->key == TokenKeys::NUMBER)) {
-    // throw ParserException (
-    //   "Expected 'TERMINAL' but was founded '" +
-    //   token->value +
-    //   "' at line " + std::to_string(this->lexer->tokenTable->current->prev->line) +
-    //   " and column " + std::to_string(this->lexer->tokenTable->current->prev->column)
-    // );
+    throw ParserException (
+      "Expected 'TERMINAL' but was founded '" +
+      token->name +
+      "' at line " + std::to_string(this->current_token_table_node->prev->line) +
+      " and column " + std::to_string(this->current_token_table_node->prev->column)
+    );
   }
 }
 
@@ -154,18 +162,13 @@ void Parser::entry_point() {
   this->eat(TokenKeys::CLOSE_PARENTHESES);
   this->eat(TokenKeys::RETURN_TYPE);
   this->eat(TokenKeys::TYPE_SPECIFIER);
-
+  this->eat(TokenKeys::OPEN_BRACKETS);
   this->command();
+  this->eat(TokenKeys::CLOSE_BRACKETS);
 }
 
 void Parser::command() {
-  bool has_open_brackets = false;
   void (Parser::*com)();
-
-  if(this->try_eat(TokenKeys::OPEN_BRACKETS)) {
-    this->eat(TokenKeys::OPEN_BRACKETS);
-    has_open_brackets = true;
-  }
 
   Token* token = this->get_token();
 
@@ -183,14 +186,11 @@ void Parser::command() {
         this->current_token_table_node = this->token_table->last;
         break;
       }
-      this->current_token_table_node = this->current_token_table_node->prev;
+      this->backtrack_token_table_node();
       break;
     }
   }
 
-  if(has_open_brackets) {
-    this->eat(TokenKeys::CLOSE_BRACKETS);
-  }
 }
 
 void Parser::declaration_command() {
@@ -243,12 +243,12 @@ void Parser::assingnment_operator() {
         token->key == TokenKeys::PLUS_EQUAL    ||
         token->key == TokenKeys::MINUS_EQUAL   ||
         token->key == TokenKeys::POWER_EQUAL)) {
-    // throw ParserException (
-    //   "Expected 'ASSIGNMENT EXPRESSION' but was founded '" +
-    //   token->value +
-    //   "' at line " + std::to_string(this->lexer->tokenTable->current->prev->line) +
-    //   " and column " + std::to_string(this->lexer->tokenTable->current->prev->column)
-    // );
+    throw ParserException (
+      "Expected 'ASSIGNMENT EXPRESSION' but was founded '" +
+      token->name +
+      "' at line " + std::to_string(this->current_token_table_node->prev->line) +
+      " and column " + std::to_string(this->current_token_table_node->prev->column)
+    );
   }
 }
 
@@ -257,11 +257,15 @@ void Parser::if_command() {
   this->eat(TokenKeys::OPEN_PARENTHESES);
   this->expression();
   this->eat(TokenKeys::CLOSE_PARENTHESES);
+  this->eat(TokenKeys::OPEN_BRACKETS);
   this->command();
+  this->eat(TokenKeys::CLOSE_BRACKETS);
 
   if(this->try_eat(TokenKeys::ELSE)) {
     this->eat(TokenKeys::ELSE);
+    this->eat(TokenKeys::OPEN_BRACKETS);
     this->command();
+    this->eat(TokenKeys::CLOSE_BRACKETS);
   }
 }
 
@@ -273,8 +277,9 @@ void Parser::for_command() {
   this->eat(TokenKeys::SEMICOLON);
   this->assignment_command_without_semicolon();
   this->eat(TokenKeys::CLOSE_PARENTHESES);
-
+  this->eat(TokenKeys::OPEN_BRACKETS);
   this->command();
+  this->eat(TokenKeys::CLOSE_BRACKETS);
 }
 
 void Parser::while_command() {
@@ -282,7 +287,9 @@ void Parser::while_command() {
   this->eat(TokenKeys::OPEN_PARENTHESES);
   this->expression();
   this->eat(TokenKeys::CLOSE_PARENTHESES);
+  this->eat(TokenKeys::OPEN_BRACKETS);
   this->command();
+  this->eat(TokenKeys::CLOSE_BRACKETS);
 }
 
 void Parser::print_command() {
@@ -309,7 +316,9 @@ void Parser::function_command() {
   this->eat(TokenKeys::CLOSE_PARENTHESES);
   this->eat(TokenKeys::RETURN_TYPE);
   this->eat(TokenKeys::TYPE_SPECIFIER);
+  this->eat(TokenKeys::OPEN_BRACKETS);
   this->command();
+  this->eat(TokenKeys::CLOSE_BRACKETS);
 }
 
 void Parser::function_parameters() {
