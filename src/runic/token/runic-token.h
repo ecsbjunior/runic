@@ -23,6 +23,7 @@ enum TokenKeys {
   COMMA,
   
   FUNCTION,
+  FUNCTION_CALL,
   TYPE_SPECIFIER,
   RETURN_TYPE,
   RETURN,
@@ -81,6 +82,7 @@ string TokenNames[] = {
   "COMMA",
 
   "FUNCTION",
+  "FUNCTION_CALL",
   "TYPE_SPECIFIER",
   "RETURN_TYPE",
   "RETURN",

@@ -25,7 +25,6 @@ TokenTableNode::TokenTableNode() {
 }
 
 TokenTable::TokenTable() {
-  this->current = nullptr;
   this->first = nullptr;
   this->last = nullptr;
 }
@@ -58,22 +57,6 @@ void TokenTable::push_front(Token* token, int line, int column) {
   }
 }
 
-void TokenTable::init_current() {
-  this->current = this->first;
-}
-
-void TokenTable::backtrack() {
-  this->current = this->current->prev;
-}
-
-Token* TokenTable::get_next_token() {
-  Token* token = this->current->token;
-  
-  this->current = this->current->next;
-
-  return token;
-}
-
 void TokenTable::show() {
   const int space = 20;
   const int columns = 4;
@@ -92,14 +75,14 @@ void TokenTable::show() {
   while(node != nullptr) {
     Token* token = node->token;
 
-    // if (!(token->key == keys::COMMENT || token->key == keys::WHITESPACE || token->key == keys::NEW_LINE)) {
+    if (!(token->key == TokenKeys::COMMENT || token->key == TokenKeys::WHITESPACE || token->key == TokenKeys::NEW_LINE)) {
       printf("|%-*s %-*s %-*d %-*d|\n",
         space, token->name.c_str(),
         space, token->lexeme.c_str(),
         space, node->line,
         space, node->column
       );
-    // }
+    }
 
     node = node->next;
   }

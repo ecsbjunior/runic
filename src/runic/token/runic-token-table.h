@@ -25,7 +25,6 @@ struct RUNIC_TOKEN_TABLE_API TokenTableNode {
 };
 
 struct RUNIC_TOKEN_TABLE_API TokenTable {
-  TokenTableNode* current;
   TokenTableNode* first;
   TokenTableNode* last;
 
@@ -33,11 +32,6 @@ struct RUNIC_TOKEN_TABLE_API TokenTable {
 
   void push_back(Token* token, int line, int column);
   void push_front(Token* token, int line, int column);
-
-  void backtrack();
-  void init_current();
-  
-  Token* get_next_token();
 
   void show();
 };

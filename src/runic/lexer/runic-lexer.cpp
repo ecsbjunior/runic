@@ -48,6 +48,10 @@ Token* Lexer::token_keyword(Token* token) {
     token->name = TokenNames[TokenKeys::FUNCTION];
     token->key = TokenKeys::FUNCTION;
   }
+  else if(token->lexeme == "fc") {
+    token->name = TokenNames[TokenKeys::FUNCTION_CALL];
+    token->key = TokenKeys::FUNCTION_CALL;
+  }
   else if(token->lexeme == "if") {
     token->name = TokenNames[TokenKeys::IF];
     token->key = TokenKeys::IF;
