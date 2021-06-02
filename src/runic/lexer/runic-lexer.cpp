@@ -1,4 +1,5 @@
 #include <runic-lexer.h>
+#include <runic-exception.h>
 
 Lexer::Lexer(string source_code) {
   this->regex_number         = regex("(\\+|\\-)?[0-9]+(.[0-9]+)?");
@@ -19,8 +20,13 @@ Lexer::Lexer(string source_code) {
 
 void Lexer::build_token_table() {
   while(!this->is_end()) {
-    Token* token = this->get_next_token();
-    this->token_table->push_back(token, this->line, this->column - token->lexeme.length());
+    try {
+      Token* token = this->get_next_token();
+      this->token_table->push_back(token, this->line, this->column - token->lexeme.length());
+    }
+    catch(RunicException exception) {
+      printf("%s\n", exception.get_message().c_str());
+    }
   }
 }
 
@@ -104,13 +110,13 @@ Token* Lexer::token_number() {
     return token;
   }
   else {
-    // throw LexerException(
-    //   "token '" + token->lexeme +
-    //   "' not regonized at line " +
-    //   std::to_string(this->line) +
-    //   " and column " +
-    //   std::to_string(this->column)
-    // );
+    throw LexerException(
+      "token '" + token->lexeme +
+      "' not regonized at line " +
+      std::to_string(this->line) +
+      " and column " +
+      std::to_string(this->column)
+    );
   }
 
   return nullptr;
@@ -370,13 +376,13 @@ Token* Lexer::get_next_token() {
     return token;
   }
 
-  // throw LexerException(
-  //   "token '" + token->lexeme +
-  //   "' not regonized at line " +
-  //   to_string(this->line) +
-  //   " and column " +
-  //   to_string(this->column)
-  // );
+  throw LexerException(
+    "token '" + token->lexeme +
+    "' not regonized at line " +
+    to_string(this->line) +
+    " and column " +
+    to_string(this->column)
+  );
 
   return nullptr;
 }

@@ -5,6 +5,7 @@
 #include <string>
 #include <runic-token.h>
 #include <runic-token-table.h>
+#include <runic-lexer-exception.h>
 
 #ifdef RUNIC_PLATFORM_WINDOWS
   #ifdef RUNIC_LEXER_IMPLEMENTATION
